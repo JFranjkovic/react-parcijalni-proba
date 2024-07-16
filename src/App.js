@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState } from 'react';
+import UserForm from './components/UserForm';
+import UserDetail from './components/UserDetail';
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  const fetchUser = async (userId) => {
+    try {
+      const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+      const data = await response.json();
+      setUser(data);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      setUser(null);
+    }
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Prikaz Podataka o Korisnicima</h1>
+      <UserForm onFetchUser={fetchUser} />
+      <UserDetail user={user} />
     </div>
   );
 }
